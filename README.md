@@ -23,13 +23,14 @@ General cypher toolchain for generating passwords, base64, and certificates onli
 		- Something similar to duckduckgo system
 
 - Stage 3 
+	- Cloud storage with encryption at-rest	
 	- share cyphers and keys via link without logging in 
 	- Smartphone integration
 		- Android/iOS app with same funcionality 
 
 ### Tasks
-- [] 
-- [] 
-- [] 
-- [] 
-- [] 
+-[] 
+-[] 
+-[] 
+-[] 
+-[] 
