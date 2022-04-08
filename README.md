@@ -29,8 +29,8 @@ General cypher toolchain for generating passwords, base64, and certificates onli
 		- Android/iOS app with same funcionality 
 
 ### Tasks
--[] 
--[] 
--[] 
--[] 
--[] 
+- [ ] Make basic layout ( maybe in angular )  
+- [ ] Make basic functionality - Stage 1 
+- [ ] Deploy in the cloud 
+- [ ] ?
+- [ ] Profit
