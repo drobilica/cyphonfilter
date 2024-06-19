@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyphonFilter</title>
+  <link rel="stylesheet" href="/src/styles/tailwind.css">
+</head>
+<body class="bg-monokai-background text-monokai-foreground h-screen flex">
+  <!-- Sidebar -->
+  <aside class="w-1/4 bg-monokai-sidebar p-6 flex flex-col justify-between">
+    <div>
+      <h1 class="text-3xl font-bold mb-6">CyphonFilter</h1>
+      <nav>
+        <ul>
+          <li class="mb-4">
+            <button data-target="ssh-key" class="tab-button w-full text-left py-2 px-4 rounded hover:bg-monokai-hover transition">SSH Key Generator</button>
+          </li>
+          <li class="mb-4">
+            <button data-target="password-gen" class="tab-button w-full text-left py-2 px-4 rounded hover:bg-monokai-hover transition">Password Generator</button>
+          </li>
+          <li class="mb-4">
+            <button data-target="base64" class="tab-button w-full text-left py-2 px-4 rounded hover:bg-monokai-hover transition">Base64 Encode/Decode</button>
+          </li>
+          <li class="mb-4">
+            <button data-target="encrypt" class="tab-button w-full text-left py-2 px-4 rounded hover:bg-monokai-hover transition">Encrypt Text</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <footer class="text-sm text-monokai-foreground-light">
+      &copy; 2024 Drobilica
+    </footer>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="w-3/4 p-10 overflow-auto" id="content">
+    <div id="welcome">
+      <h2 class="text-4xl font-bold mb-4">Welcome to CyphonFilter</h2>
+      <p class="text-lg">Select a tool from the sidebar to get started.</p>
+    </div>
+    <div id="ssh-key" class="tab-content hidden">
+      <h2 class="text-4xl font-bold mb-4">SSH Key Generator</h2>
+      <form id="ssh-key-form" class="space-y-4">
+        <div>
+          <label for="key-type" class="block text-lg font-medium">Key Type</label>
+          <select id="key-type" class="mt-1 block w-full p-2 bg-monokai-input border border-monokai-hover rounded">
+            <option value="rsa">RSA</option>
+            <option value="ed25519">ED25519</option>
+          </select>
+        </div>
+        <div>
+          <label for="key-size" class="block text-lg font-medium">Key Size</label>
+          <select id="key-size" class="mt-1 block w-full p-2 bg-monokai-input border border-monokai-hover rounded">
+            <option value="2048">2048</option>
+            <option value="4096">4096</option>
+          </select>
+        </div>
+        <div>
+          <label for="key-name" class="block text-lg font-medium">Key Name (optional)</label>
+          <input type="text" id="key-name" class="mt-1 block w-full p-2 bg-monokai-input border border-monokai-hover rounded" placeholder="my-ssh-key">
+        </div>
+        <div>
+          <label for="key-passphrase" class="block text-lg font-medium">Passphrase (optional)</label>
+          <input type="password" id="key-passphrase" class="mt-1 block w-full p-2 bg-monokai-input border border-monokai-hover rounded" placeholder="Enter passphrase">
+        </div>
+        <button type="submit" class="w-full py-2 px-4 bg-monokai-button text-white rounded hover:bg-monokai-hover transition">Generate SSH Key</button>
+      </form>
+      <div id="ssh-key-result" class="mt-4 hidden">
+        <h3 class="text-2xl font-bold mb-2">Generated SSH Key</h3>
+        <pre id="ssh-key-output" class="p-2 bg-monokai-input border border-monokai-hover rounded"></pre>
+        <button id="download-private-key" class="mt-2 py-2 px-4 bg-monokai-button text-white rounded hover:bg-monokai-hover transition">Download Private Key</button>
+        <h3 class="text-2xl font-bold mb-2 mt-4">Generated Public Key</h3>
+        <pre id="ssh-public-key-output" class="p-2 bg-monokai-input border border-monokai-hover rounded"></pre>
+        <button id="download-public-key" class="mt-2 py-2 px-4 bg-monokai-button text-white rounded hover:bg-monokai-hover transition">Download Public Key</button>
+      </div>
+    </div>
+    <div id="password-gen" class="tab-content hidden">
+      <h2 class="text-4xl font-bold mb-4">Password Generator</h2>
+      <form id="password-gen-form" class="space-y-4">
+        <div>
+          <label for="password-length" class="block text-lg font-medium">Password Length</label>
+          <input type="range" id="password-length" name="password-length" min="8" max="32" value="8" class="w-full">
+          <span id="password-length-value" class="block text-lg font-medium mt-2">8</span>
+        </div>
+        <div>
+          <label class="block text-lg font-medium">Character Sets</label>
+          <div>
+            <input type="checkbox" id="include-uppercase" class="mr-2">
+            <label for="include-uppercase" class="text-lg">Include Uppercase</label>
+          </div>
+          <div>
+            <input type="checkbox" id="include-lowercase" class="mr-2" checked>
+            <label for="include-lowercase" class="text-lg">Include Lowercase</label>
+          </div>
+          <div>
+            <input type="checkbox" id="include-numbers" class="mr-2">
+            <label for="include-numbers" class="text-lg">Include Numbers</label>
+          </div>
+          <div>
+            <input type="checkbox" id="include-symbols" class="mr-2">
+            <label for="include-symbols" class="text-lg">Include Symbols</label>
+          </div>
+        </div>
+      </form>
+      <div id="password-result" class="mt-4 hidden">
+        <h3 class="text-2xl font-bold mb-2">Generated Password</h3>
+        <div class="flex items-center">
+          <pre id="password-output" class="p-2 bg-monokai-input border border-monokai-hover rounded flex-grow"></pre>
+          <button id="copy-password" class="ml-2 p-2 bg-monokai-button text-white rounded hover:bg-monokai-hover transition">Copy</button>
+        </div>
+      </div>
+    </div>
+    <div id="base64" class="tab-content hidden">
+      <h2 class="text-4xl font-bold mb-4">Base64 Encode/Decode</h2>
+      <form id="base64-form" class="space-y-4">
+        <div>
+          <label for="base64-input" class="block text-lg font-medium">Input</label>
+          <textarea id="base64-input" class="mt-1 block w-full p-2 bg-monokai-input border border-monokai-hover rounded" rows="4"></textarea>
+        </div>
+        <div>
+          <label for="base64-output" class="block text-lg font-medium">Output</label>
+          <textarea id="base64-output" class="mt-1 block w-full p-2 bg-monokai-input border border-monokai-hover rounded" rows="4" readonly></textarea>
+        </div>
+        <div class="flex space-x-4">
+          <button id="encode-button" type="button" class="w-full py-2 px-4 bg-monokai-button text-white rounded hover:bg-monokai-hover transition">Encode</button>
+          <button id="decode-button" type="button" class="w-full py-2 px-4 bg-monokai-button text-white rounded hover:bg-monokai-hover transition">Decode</button>
+        </div>
+      </form>
+    </div>
+    <div id="encrypt" class="tab-content hidden">
+      <h2 class="text-4xl font-bold mb-4">Encrypt Text</h2>
+      <form id="encrypt-form" class="space-y-4">
+        <div>
+          <label for="encrypt-input" class="block text-lg font-medium">Text to Encrypt</label>
+          <textarea id="encrypt-input" class="mt-1 block w-full p-2 bg-monokai-input border border-monokai-hover rounded" rows="4" maxlength="2000"></textarea>
+        </div>
+        <div>
+          <label for="encrypt-key" class="block text-lg font-medium">Encryption Key</label>
+          <div class="flex">
+            <input type="text" id="encrypt-key" class="mt-1 block w-full p-2 bg-monokai-input border border-monokai-hover rounded">
+            <button id="generate-key" type="button" class="ml-2 py-2 px-4 bg-monokai-button text-white rounded hover:bg-monokai-hover transition">Generate Key</button>
+          </div>
+        </div>
+        <div class="flex space-x-4">
+          <button id="encrypt-button" type="button" class="w-full py-2 px-4 bg-monokai-button text-white rounded hover:bg-monokai-hover transition">Encrypt</button>
+        </div>
+        <div id="encrypt-result" class="mt-4 hidden">
+          <h3 class="text-2xl font-bold mb-2">Encrypted Text</h3>
+          <pre id="encrypt-output" class="p-2 bg-monokai-input border border-monokai-hover rounded"></pre>
+        </div>
+      </form>
+    </div>
+    
+    
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
