@@ -1,0 +1,51 @@
+name: Build and Deploy to drobilica.github.io
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  TARGET_REPO: drobilica/drobilica.github.io
+  TARGET_PATH: drobilica-homepage
+  TARGET_FOLDER: cyphonfilter
+  NODE_ENV: production
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.TARGET_REPO }}
+          token: ${{ secrets.drobilica_access }}
+          path: ${{ env.TARGET_PATH }}
+
+      - name: Copy build output
+        run: |
+          mkdir -p ${{ env.TARGET_PATH }}/${{ env.TARGET_FOLDER }}
+          rm -rf ${{ env.TARGET_PATH }}/${{ env.TARGET_FOLDER }}/*
+          cp -R dist/* ${{ env.TARGET_PATH }}/${{ env.TARGET_FOLDER }}
+
+      - name: Commit and push changes
+        run: |
+          cd ${{ env.TARGET_PATH }}
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git diff --staged --quiet || (git commit -m "Update from CyphonFilter" && git push)

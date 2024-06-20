@@ -10,7 +10,7 @@ export function initPasswordGenerator() {
     const passwordResult = document.getElementById('password-result');
     const passwordOutput = document.getElementById('password-output');
     const copyPasswordButton = document.getElementById('copy-password');
-  
+
     const inputs = [passwordLengthInput, includeUppercase, includeLowercase, includeNumbers, includeSymbols];
   
     inputs.forEach(input => {
